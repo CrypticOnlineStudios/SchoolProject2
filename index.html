@@ -1,1 +1,141 @@
-school
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Interactive Image Gallery</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .image {
+    width: 300px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .image:hover {
+    transform: scale(1.1);
+  }
+  .expanded-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .expanded-image img {
+    max-width: 80%;
+    max-height: 80%;
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .button:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img class="image" src="image.jpg" alt="Image">
+</div>
+
+<div class="expanded-image" style="display: none;">
+  <img src="" alt="Expanded Image">
+</div>
+
+<div class="button-container" style="display: none;">
+  <button class="prev-button button" onclick="prevImage()">Prev</button>
+  <button class="next-button button" onclick="nextImage()">Next</button>
+</div>
+
+<script>
+  const images = ["image1.jpg", "image2.jpg", "image3.jpg"]; // Add your image URLs here
+  let currentImageIndex;
+
+  const imageElement = document.querySelector('.expanded-image img');
+  const prevButton = document.querySelector('.prev-button');
+  const nextButton = document.querySelector('.next-button');
+  const expandedImageContainer = document.querySelector('.expanded-image');
+  const buttonContainer = document.querySelector('.button-container');
+
+  document.querySelectorAll('.image').forEach((image, index) => {
+    image.addEventListener('click', () => {
+      currentImageIndex = index;
+      showExpandedImage();
+    });
+  });
+
+  function showExpandedImage() {
+    imageElement.src = images[currentImageIndex];
+    expandedImageContainer.style.display = 'flex';
+    buttonContainer.style.display = 'flex';
+  }
+
+  function hideExpandedImage() {
+    expandedImageContainer.style.display = 'none';
+    buttonContainer.style.display = 'none';
+  }
+
+  function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    showExpandedImage();
+  }
+
+  function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    showExpandedImage();
+  }
+
+  expandedImageContainer.addEventListener('click', () => {
+    hideExpandedImage();
+  });
+
+  imageElement.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent the click event from bubbling up to the parent container
+  });
+
+  prevButton.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent the click event from bubbling up to the parent container
+  });
+
+  nextButton.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent the click event from bubbling up to the parent container
+  });
+
+</script>
+
+</body>
+</html>
